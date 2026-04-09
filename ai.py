@@ -36,6 +36,7 @@ def run_realtime_plate_detection(
 	show_fps: bool = True,
 	save_output: bool = False,
 	output_path: str = "realtime_detection_output.mp4",
+    target_fps: int | None = None,
 	config_dict: dict | None = None,
 	stop_event=None,
 ) -> None:
@@ -52,6 +53,8 @@ def run_realtime_plate_detection(
 		fps = cap.get(cv2.CAP_PROP_FPS)
 		if fps is None or fps <= 0:
 			fps = 30
+		if target_fps is not None and target_fps > 0:
+			fps = target_fps
 		fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 		writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 

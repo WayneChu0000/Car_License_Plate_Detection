@@ -78,16 +78,22 @@ class LicensePlateGUI:
         imgsz_combo.grid(row=6, column=1, sticky=tk.W, padx=5, pady=5)
         self.imgsz_var.trace_add("write", self.update_shared_config)
 
-        # 6. Checkboxes (Show FPS, Save Output)
+        # 6. Target Output FPS (Optional override)
+        ttk.Label(main_frame, text="Output Video FPS:", font=("Helvetica", 10)).grid(row=7, column=0, sticky=tk.W, pady=5)
+        self.target_fps_var = tk.StringVar(value="Auto")
+        fps_combo = ttk.Combobox(main_frame, textvariable=self.target_fps_var, values=["Auto", "15", "24", "30", "60"], state="readonly", width=10)
+        fps_combo.grid(row=7, column=1, sticky=tk.W, padx=5, pady=5)
+
+        # 7. Checkboxes (Show FPS, Save Output)
         self.show_fps_var = tk.BooleanVar(value=True)
-        ttk.Checkbutton(main_frame, text="Show FPS Overlay", variable=self.show_fps_var, command=self.update_shared_config).grid(row=7, column=0, columnspan=2, sticky=tk.W, pady=5)
+        ttk.Checkbutton(main_frame, text="Show Current FPS Target Overlay", variable=self.show_fps_var, command=self.update_shared_config).grid(row=8, column=0, columnspan=2, sticky=tk.W, pady=5)
 
         self.save_video_var = tk.BooleanVar(value=False)
-        ttk.Checkbutton(main_frame, text="Save Output to realtime_detection_output.mp4", variable=self.save_video_var).grid(row=8, column=0, columnspan=3, sticky=tk.W, pady=5)
+        ttk.Checkbutton(main_frame, text="Save Output to realtime_detection_output.mp4", variable=self.save_video_var).grid(row=9, column=0, columnspan=3, sticky=tk.W, pady=5)
 
-        # 7. Start/Stop Button
+        # 8. Start/Stop Button
         self.start_btn = ttk.Button(main_frame, text="▶ Start Detection", command=self.start_detection)
-        self.start_btn.grid(row=9, column=0, columnspan=3, pady=30, ipadx=10, ipady=10)
+        self.start_btn.grid(row=10, column=0, columnspan=3, pady=25, ipadx=10, ipady=10)
 
     def update_conf_label(self, val):
         self.conf_label.config(text=f"{float(val):.2f}")
@@ -101,6 +107,7 @@ class LicensePlateGUI:
         """Called when the user clicks 'X' to close the GUI."""
         self.stop_event.set()
         self.root.destroy()
+        os._exit(0)  # Force complete exit of all threads to prevent OpenCV hangs
 
     def update_shared_config(self, *args):
         """Updates the shared config dict used by the YOLO loop dynamically."""
@@ -137,6 +144,9 @@ class LicensePlateGUI:
         imgsz = int(self.imgsz_var.get())
         show_fps = self.show_fps_var.get()
         save_output = self.save_video_var.get()
+        
+        target_fps_raw = self.target_fps_var.get()
+        target_fps = int(target_fps_raw) if target_fps_raw.isdigit() else None
 
         try:
             resolved_model = resolve_model_path(model_path)
@@ -160,6 +170,7 @@ class LicensePlateGUI:
                     imgsz=imgsz,
                     show_fps=show_fps,
                     save_output=save_output,
+                    target_fps=target_fps,
                     config_dict=self.shared_config,
                     stop_event=self.stop_event
                 )
