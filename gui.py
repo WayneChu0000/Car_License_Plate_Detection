@@ -75,17 +75,17 @@ class LicensePlateGUI:
 
         # 4. IoU Threshold
         ttk.Label(main_frame, text="NMS IoU (0-1):", font=("Helvetica", 10)).grid(row=6, column=0, sticky=tk.NW, pady=5)
-        self.iou_var = tk.DoubleVar(value=0.45)
+        self.iou_var = tk.DoubleVar(value=0.35)
         iou_slider = ttk.Scale(main_frame, from_=0.01, to=1.0, variable=self.iou_var, orient=tk.HORIZONTAL, command=self.update_iou_label)
         iou_slider.grid(row=6, column=1, sticky=tk.EW, padx=5, pady=5)
-        self.iou_label = ttk.Label(main_frame, text="0.45")
+        self.iou_label = ttk.Label(main_frame, text="0.35")
         self.iou_label.grid(row=6, column=2, pady=5)
         ttk.Label(main_frame, text="Merges overlapping boxes around the same plate.", font=("Helvetica", 8, "italic"), foreground="gray").grid(row=7, column=1, sticky=tk.W, pady=(0, 10))
 
         # 5. Image Size
         ttk.Label(main_frame, text="Inference Size:", font=("Helvetica", 10)).grid(row=8, column=0, sticky=tk.NW, pady=5)
-        self.imgsz_var = tk.StringVar(value="640")
-        imgsz_combo = ttk.Combobox(main_frame, textvariable=self.imgsz_var, values=["320", "480", "640", "960", "1280"], state="readonly", width=10)
+        self.imgsz_var = tk.StringVar(value="960")
+        imgsz_combo = ttk.Combobox(main_frame, textvariable=self.imgsz_var, values=["480", "640", "960", "1280", "1440", "1920", "2560"], state="readonly", width=10)
         imgsz_combo.grid(row=8, column=1, sticky=tk.W, padx=5, pady=5)
         self.imgsz_var.trace_add("write", self.update_shared_config)
         ttk.Label(main_frame, text="Resolution AI uses. Higher = better for small plates, but slower.", font=("Helvetica", 8, "italic"), foreground="gray").grid(row=9, column=1, sticky=tk.W, pady=(0, 10))
