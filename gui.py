@@ -75,12 +75,12 @@ class LicensePlateGUI:
 
         # 4. IoU Threshold
         ttk.Label(main_frame, text="NMS IoU (0-1):", font=("Helvetica", 10)).grid(row=6, column=0, sticky=tk.NW, pady=5)
-        self.iou_var = tk.DoubleVar(value=0.35)
+        self.iou_var = tk.DoubleVar(value=0.25)
         iou_slider = ttk.Scale(main_frame, from_=0.01, to=1.0, variable=self.iou_var, orient=tk.HORIZONTAL, command=self.update_iou_label)
         iou_slider.grid(row=6, column=1, sticky=tk.EW, padx=5, pady=5)
-        self.iou_label = ttk.Label(main_frame, text="0.35")
+        self.iou_label = ttk.Label(main_frame, text="0.25")
         self.iou_label.grid(row=6, column=2, pady=5)
-        ttk.Label(main_frame, text="Merges overlapping boxes around the same plate.", font=("Helvetica", 8, "italic"), foreground="gray").grid(row=7, column=1, sticky=tk.W, pady=(0, 10))
+        ttk.Label(main_frame, text="Merges overlapping boxes around the same plate. Lower values = more boxes.", font=("Helvetica", 8, "italic"), foreground="gray").grid(row=7, column=1, sticky=tk.W, pady=(0, 10))
 
         # 5. Image Size
         ttk.Label(main_frame, text="Inference Size:", font=("Helvetica", 10)).grid(row=8, column=0, sticky=tk.NW, pady=5)
