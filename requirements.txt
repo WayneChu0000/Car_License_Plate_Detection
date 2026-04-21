@@ -1,6 +1,8 @@
-ultralytics
-opencv-python
+ultralytics>=8.4.36
+opencv-python>=4.8.0
 notebook
 kagglehub
 matplotlib
 seaborn
+torch
+numpy
